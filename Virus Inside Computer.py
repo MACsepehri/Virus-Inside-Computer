@@ -8,6 +8,10 @@ display_info = pygame.display.Info()
 win = pygame.display.set_mode((display_info.current_w, display_info.current_h))
 status = "menu"
 
+# start
+def start():
+    pass
+
 # update
 def update():
     global status
@@ -19,6 +23,7 @@ def update():
             assets.Button(win, 0, 450, 200, 90, assets.font, "Exit", middle=True)
         ]
         assets.draw_button(btn)
+        assets.button_action(btn, [start, lambda: ..., sys.exit])
 
 # main
 def main():
