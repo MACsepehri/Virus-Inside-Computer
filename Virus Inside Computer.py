@@ -16,17 +16,23 @@ folder_list = [
     (display_info.current_w - 300, 500)
 ]
 
+taskbar_ = pygame.image.load("assets/image/logo/taskbar.png").convert_alpha()
+taskbar_ = pygame.transform.scale(
+    taskbar_,
+    (display_info.current_w, taskbar_.get_height())
+)
+
 folder_image = pygame.transform.scale(pygame.image.load("assets/image/logo/full-folder.png"), (100, 80))
+player_middle = pygame.transform.scale(pygame.image.load("assets/image/player/middle.png"), (130, 140))
+player_right = pygame.transform.scale(pygame.image.load("assets/image/player/right.png"), (130, 140))
+player_left = pygame.transform.scale(pygame.image.load("assets/image/player/left.png"), (130, 140))
+player = player_middle
+playerX = 10
+playerY = display_info.current_h - taskbar_.get_height() - player.get_height() + 20
 
 # draw taskbar
 def taskbar():
-    taskbar = pygame.image.load("assets/image/logo/taskbar.png").convert_alpha()
-    taskbar = pygame.transform.scale(
-        taskbar,
-        (display_info.current_w, taskbar.get_height())
-    )
-
-    win.blit(taskbar, (0, display_info.current_h - taskbar.get_height()))
+    win.blit(taskbar_, (0, display_info.current_h - taskbar_.get_height()))
 
 # start
 def start():
@@ -45,6 +51,7 @@ def ingame():
         for pos in folder_list:
             win.blit(folder_image, pos)
         taskbar()
+        win.blit(player, (playerX, playerY))
 
 # update
 def update():
