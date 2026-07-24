@@ -19,9 +19,9 @@ def ingame():
     global status
     if status == "start":
         win10IMAGE = pygame.image.load("assets/image/logo/win10.png")
-        win10IMAGE_x = 100
-        win10IMAGE_y = 100
-        win.blit(win10IMAGE, (win10IMAGE_x, win10IMAGE_y))
+        win10_rect = win10IMAGE.get_rect()
+        win10_rect.center = win.get_rect().center
+        win.blit(win10IMAGE, win10_rect)
 
 # update
 def update():
