@@ -20,7 +20,13 @@ folder_image = pygame.transform.scale(pygame.image.load("assets/image/logo/full-
 
 # draw taskbar
 def taskbar():
-    pass
+    taskbar = pygame.image.load("assets/image/logo/taskbar.png").convert_alpha()
+    taskbar = pygame.transform.scale(
+        taskbar,
+        (display_info.current_w, taskbar.get_height())
+    )
+
+    win.blit(taskbar, (0, display_info.current_h - taskbar.get_height()))
 
 # start
 def start():
@@ -38,6 +44,7 @@ def ingame():
 
         for pos in folder_list:
             win.blit(folder_image, pos)
+        taskbar()
 
 # update
 def update():
