@@ -1,10 +1,16 @@
 import pygame
 import sys
+from assets import assets
 
 # init
 pygame.init()
 display_info = pygame.display.Info()
 win = pygame.display.set_mode((display_info.current_w, display_info.current_h))
+status = "menu"
+
+# update
+def update():
+    pass
 
 # main
 def main():
