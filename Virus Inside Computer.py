@@ -18,6 +18,10 @@ folder_list = [
 
 folder_image = pygame.transform.scale(pygame.image.load("assets/image/logo/full-folder.png"), (100, 80))
 
+# draw taskbar
+def taskbar():
+    pass
+
 # start
 def start():
     global status
