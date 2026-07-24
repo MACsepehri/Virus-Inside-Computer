@@ -10,11 +10,13 @@ color = (135,206,235)
 status = "menu"
 
 folder_list = [
-    (100, 300),
-    (400, 300),
+    (100, 100),
+    (400, 200),
     (200, 400),
     (display_info.current_w - 300, 500)
 ]
+
+folder_image = pygame.transform.scale(pygame.image.load("assets/image/logo/full-folder.png"), (100, 80))
 
 # start
 def start():
@@ -23,12 +25,15 @@ def start():
     status = "start"
 
 def ingame():
-    global status
+    global status, folder_list
     if status == "start":
         win10IMAGE = pygame.image.load("assets/image/logo/win10.png")
         win10_rect = win10IMAGE.get_rect()
         win10_rect.center = win.get_rect().center
         win.blit(win10IMAGE, win10_rect)
+
+        for pos in folder_list:
+            win.blit(folder_image, pos)
 
 # update
 def update():
