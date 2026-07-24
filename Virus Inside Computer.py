@@ -35,6 +35,10 @@ phase_1_timer = 0
 # draw folders
 draw_folder = False
 
+# phone
+def phone():
+    pass
+
 # phases
 def videos():
     global status
