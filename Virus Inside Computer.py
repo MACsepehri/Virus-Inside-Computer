@@ -35,9 +35,16 @@ phase_1_timer = 0
 # draw folders
 draw_folder = False
 
+# phase 1 data
+detected_viruses = 0
+detected_glitches = 0
+
 # phone
 def phone():
-    pass
+    global status
+
+    if status == "phase_1":
+        assets.draw_text(f"Detected virus: {detected_viruses}\nDetected glitch (might be virus): {detected_glitches}", assets.font, "black", win, 20, 20)
 
 # phases
 def videos():
@@ -211,13 +218,16 @@ def ingame():
 
 # phase parts
 def phase_1():
-    global status, draw_folder
+    global status, draw_folder, phase_1_messageinfo_show
 
     if status == "phase_1":
         taskbar()
         draw_player()
         phase1_messagebox_info()
         draw_folder = False
+
+        if not phase_1_messageinfo_show:
+            phone()
 
 # update
 def update():
