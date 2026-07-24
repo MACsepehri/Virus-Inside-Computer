@@ -10,7 +10,7 @@ color = (135,206,235)
 status = "menu"
 
 folder_list = [
-    (100, 100, 100, 80),  # (x, y, width, height)
+    (100, 100, 100, 80),
     (400, 200, 100, 80),
     (200, 400, 100, 80),
     (display_info.current_w - 300, 500, 100, 80)
@@ -88,18 +88,36 @@ def draw_player():
     if not jump:
         on_platform = False
         platform_y = None
-        player_rect = pygame.Rect(playerX, playerY + player.get_height() - 5, 
-                                 player.get_width(), 5)
+
         for folder in folder_list:
-            folder_rect = pygame.Rect(folder[0], folder[1], folder[2], folder[3])
-            if player_rect.colliderect(folder_rect):
-                if playerY + player.get_height() <= folder[1] + 10:
-                    playerY = folder[1] - player.get_height()
-                    on_platform = True
-                    platform_y = folder[1]
-                    jump = False
-                    jump_velocity = 0
-                    break
+            horizontal = (
+                playerX + player.get_width() > folder[0]
+                and playerX < folder[0] + folder[2]
+            )
+
+            standing = abs((playerY + player.get_height()) - folder[1]) <= 3
+
+            if horizontal and standing:
+                on_platform = True
+                platform_y = folder[1]
+
+                button = [
+                    assets.Button(
+                        win,
+                        folder[0] - 50,
+                        folder[1] - 60,
+                        200,
+                        50,
+                        assets.font,
+                        "Enter"
+                    )
+                ]
+                assets.draw_button(button)
+
+                break
+
+        if not on_platform and playerY < come_down_y:
+            playerY += 1.5
         
         if not on_platform and playerY < come_down_y:
             playerY += 1.5
