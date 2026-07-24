@@ -10,7 +10,15 @@ status = "menu"
 
 # update
 def update():
-    pass
+    global status
+
+    if status == "menu":
+        btn = [
+            assets.Button(win, 0, 250, 200, 90, assets.font, "Start", middle=True),
+            assets.Button(win, 0, 350, 200, 90, assets.font, "Setting", middle=True),
+            assets.Button(win, 0, 450, 200, 90, assets.font, "Exit", middle=True)
+        ]
+        assets.draw_button(btn)
 
 # main
 def main():
@@ -20,6 +28,7 @@ def main():
                 sys.exit(0)
 
         win.fill("skyblue")
+        update()
         pygame.display.update()
 
 if __name__ == "__main__":
