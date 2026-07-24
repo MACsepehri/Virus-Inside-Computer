@@ -9,11 +9,21 @@ win = pygame.display.set_mode((display_info.current_w, display_info.current_h))
 color = (135,206,235)
 status = "menu"
 
+# phases
+def videos():
+    global status
+    global playerX, playerY
+
+    status = "phase_1"
+    playerX = 10
+    playerY = display_info.current_h - taskbar_.get_height() - player.get_height() + 20
+    phase_1()
+
 folder_list = [
-    (100, 100, 100, 80, ["Game", 100, 180]),
-    (400, 200, 100, 80, ["Photos", 400, 280]),
-    (200, 400, 100, 80, ["Docs", 200, 480]),
-    (display_info.current_w - 300, 500, 100, 80, ["Videos", display_info.current_w - 300, 580])
+    (100, 100, 100, 80, ["Game", 100, 180, lambda: ...]),
+    (400, 200, 100, 80, ["Photos", 400, 280, lambda: ...]),
+    (200, 400, 100, 80, ["Docs", 200, 480, lambda: ...]),
+    (display_info.current_w - 300, 500, 100, 80, ["Videos", display_info.current_w - 300, 580, videos])
 ]
 
 taskbar_ = pygame.image.load("assets/image/logo/taskbar.png").convert_alpha()
@@ -112,6 +122,7 @@ def draw_player():
                     )
                 ]
                 assets.draw_button(button)
+                assets.button_action(button, [ folder[4][3] ])
                 break
 
         if not on_platform and playerY < come_down_y:
@@ -167,6 +178,14 @@ def ingame():
         for folder in folder_list:
             assets.draw_text(folder[4][0], assets.font, "black", win, folder[4][1], folder[4][2])
 
+# phase parts
+def phase_1():
+    global status
+
+    if status == "phase_1":
+        taskbar()
+        draw_player()
+
 # update
 def update():
     global status
@@ -181,6 +200,7 @@ def update():
         assets.button_action(btn, [start, lambda: ..., sys.exit])
 
     ingame()
+    phase_1()
 
 # main
 def main():
