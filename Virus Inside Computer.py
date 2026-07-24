@@ -30,6 +30,22 @@ player = player_middle
 playerX = 10
 playerY = display_info.current_h - taskbar_.get_height() - player.get_height() + 20
 
+# player movement
+def draw_player():
+    global playerX
+
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_a]:
+        playerX -= 3
+    elif keys[pygame.K_d]:
+        playerX += 3
+
+    if playerX <= 0:
+        playerX = 0
+    elif playerX >= display_info.current_w - player.get_width():
+        playerX = display_info.current_w - player.get_width()
+    win.blit(player, (playerX, playerY))
+
 # draw taskbar
 def taskbar():
     win.blit(taskbar_, (0, display_info.current_h - taskbar_.get_height()))
@@ -51,7 +67,7 @@ def ingame():
         for pos in folder_list:
             win.blit(folder_image, pos)
         taskbar()
-        win.blit(player, (playerX, playerY))
+        draw_player()
 
 # update
 def update():
