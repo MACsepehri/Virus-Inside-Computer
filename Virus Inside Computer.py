@@ -38,6 +38,7 @@ draw_folder = False
 # phase 1 data
 detected_viruses = 0
 detected_glitches = 0
+detect_times = 10
 
 # phone
 def phone():
@@ -45,6 +46,8 @@ def phone():
 
     if status == "phase_1":
         assets.draw_text(f"Detected virus: {detected_viruses}\nDetected glitch (might be virus): {detected_glitches}", assets.font, "black", win, 20, 20)
+        btn = [ assets.Button(win, 20, 150, 200, 90, assets.font, f"Detect ({detect_times})") ]
+        assets.draw_button(btn)
 
 # phases
 def videos():
