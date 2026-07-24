@@ -45,6 +45,10 @@ jump_velocity = 0
 on_platform = False
 platform_y = None
 
+# phase massage info show
+phase_1_messageinfo_show = True
+phase_1_timer = 0
+
 # player movement
 def draw_player():
     global playerX, playerY, jump, come_down_y, jump_velocity, player, on_platform, platform_y
@@ -153,6 +157,16 @@ def draw_player():
     
     win.blit(player, (playerX, playerY))
 
+# message box
+def phase1_messagebox_info():
+    global phase_1_messageinfo_show, phase_1_timer
+    if phase_1_messageinfo_show:
+        assets.draw_text("Remove viruses, fight with them and go to next level.", assets.font, "black", win, 100, 100)
+        if int(phase_1_timer) <= 100:
+            phase_1_timer += 0.05
+        else:
+            phase_1_messageinfo_show = False
+
 # draw taskbar
 def taskbar():
     win.blit(taskbar_, (0, display_info.current_h - taskbar_.get_height()))
@@ -185,6 +199,7 @@ def phase_1():
     if status == "phase_1":
         taskbar()
         draw_player()
+        phase1_messagebox_info()
 
 # update
 def update():
