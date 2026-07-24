@@ -9,6 +9,13 @@ win = pygame.display.set_mode((display_info.current_w, display_info.current_h))
 color = (135,206,235)
 status = "menu"
 
+folder_list = [
+    (100, 300),
+    (400, 300),
+    (200, 400),
+    (display_info.current_w - 300, 500)
+]
+
 # start
 def start():
     global status
