@@ -10,10 +10,10 @@ color = (135,206,235)
 status = "menu"
 
 folder_list = [
-    (100, 100),
-    (400, 200),
-    (200, 400),
-    (display_info.current_w - 300, 500)
+    (100, 100, 100, 80),  # (x, y, width, height)
+    (400, 200, 100, 80),
+    (200, 400, 100, 80),
+    (display_info.current_w - 300, 500, 100, 80)
 ]
 
 taskbar_ = pygame.image.load("assets/image/logo/taskbar.png").convert_alpha()
@@ -32,10 +32,12 @@ playerY = display_info.current_h - taskbar_.get_height() - player.get_height() +
 jump = False
 come_down_y = display_info.current_h - taskbar_.get_height() - player.get_height() + 20
 jump_velocity = 0
+on_platform = False
+platform_y = None
 
 # player movement
 def draw_player():
-    global playerX, playerY, jump, come_down_y, jump_velocity, player
+    global playerX, playerY, jump, come_down_y, jump_velocity, player, on_platform, platform_y
 
     keys = pygame.key.get_pressed()
     
@@ -51,6 +53,8 @@ def draw_player():
     if keys[pygame.K_SPACE] and not jump:
         jump = True
         jump_velocity = -20
+        on_platform = False
+        platform_y = None
 
     if jump:
         if keys[pygame.K_SPACE]:
@@ -60,10 +64,60 @@ def draw_player():
             
         playerY += jump_velocity
         
+        if jump_velocity > 0:
+            for folder in folder_list:
+                folder_rect = pygame.Rect(folder[0], folder[1], folder[2], folder[3])
+                player_rect = pygame.Rect(playerX, playerY + player.get_height() - 10, 
+                                         player.get_width(), 10)
+                
+                if player_rect.colliderect(folder_rect):
+                    playerY = folder[1] - player.get_height()
+                    jump = False
+                    jump_velocity = 0
+                    on_platform = True
+                    platform_y = folder[1]
+                    break
+        
         if playerY >= come_down_y:
             playerY = come_down_y
             jump = False
             jump_velocity = 0
+            on_platform = False
+            platform_y = None
+
+    if not jump:
+        on_platform = False
+        platform_y = None
+        player_rect = pygame.Rect(playerX, playerY + player.get_height() - 5, 
+                                 player.get_width(), 5)
+        for folder in folder_list:
+            folder_rect = pygame.Rect(folder[0], folder[1], folder[2], folder[3])
+            if player_rect.colliderect(folder_rect):
+                if playerY + player.get_height() <= folder[1] + 10:
+                    playerY = folder[1] - player.get_height()
+                    on_platform = True
+                    platform_y = folder[1]
+                    jump = False
+                    jump_velocity = 0
+                    break
+        
+        if not on_platform and playerY < come_down_y:
+            playerY += 1.5
+            player_rect = pygame.Rect(playerX, playerY + player.get_height() - 5, 
+                                     player.get_width(), 5)
+            for folder in folder_list:
+                folder_rect = pygame.Rect(folder[0], folder[1], folder[2], folder[3])
+                if player_rect.colliderect(folder_rect):
+                    if playerY + player.get_height() <= folder[1] + 10:
+                        playerY = folder[1] - player.get_height()
+                        on_platform = True
+                        platform_y = folder[1]
+                        break
+            
+            if playerY >= come_down_y:
+                playerY = come_down_y
+                on_platform = False
+                platform_y = None
 
     if playerX <= 0:
         playerX = 0
@@ -91,7 +145,7 @@ def ingame():
         win.blit(win10IMAGE, win10_rect)
 
         for pos in folder_list:
-            win.blit(folder_image, pos)
+            win.blit(folder_image, (pos[0], pos[1]))
         taskbar()
         draw_player()
 
