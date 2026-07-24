@@ -135,10 +135,16 @@ def draw_player():
                     break
 
         if not on_platform and playerY < come_down_y:
-            playerY += 1.5
+            if status == "phase_1":
+                player += 1.5
+            else:
+                playerY += 0.5
         
         if not on_platform and playerY < come_down_y:
-            playerY += 1.5
+            if status == "phase_1":
+                player += 1.5
+            else:
+                playerY += 0.5
             if draw_folder:
                 player_rect = pygame.Rect(playerX, playerY + player.get_height() - 5, 
                                         player.get_width(), 5)
