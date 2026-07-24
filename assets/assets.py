@@ -86,7 +86,11 @@ class Button:
 def draw_text(text, font, color, win, x, y):
     win.blit(font.render(text, True, color), (x, y))
 
-def draw_button(btn_list, action_list):
+def draw_button(btn_list):
+    for btn in btn_list:
+        btn.draw()
+
+def button_action(btn_list, action_list):
     i = 0
     for btn in btn_list:
         if btn.is_clicked():
