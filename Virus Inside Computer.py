@@ -10,10 +10,10 @@ color = (135,206,235)
 status = "menu"
 
 folder_list = [
-    (100, 100, 100, 80),
-    (400, 200, 100, 80),
-    (200, 400, 100, 80),
-    (display_info.current_w - 300, 500, 100, 80)
+    (100, 100, 100, 80, ["Game", 100, 180]),
+    (400, 200, 100, 80, ["Photos", 400, 280]),
+    (200, 400, 100, 80, ["Docs", 200, 480]),
+    (display_info.current_w - 300, 500, 100, 80, ["Videos", display_info.current_w - 300, 580])
 ]
 
 taskbar_ = pygame.image.load("assets/image/logo/taskbar.png").convert_alpha()
@@ -94,7 +94,6 @@ def draw_player():
                 playerX + player.get_width() > folder[0]
                 and playerX < folder[0] + folder[2]
             )
-
             standing = abs((playerY + player.get_height()) - folder[1]) <= 3
 
             if horizontal and standing:
@@ -113,7 +112,6 @@ def draw_player():
                     )
                 ]
                 assets.draw_button(button)
-
                 break
 
         if not on_platform and playerY < come_down_y:
@@ -166,6 +164,8 @@ def ingame():
             win.blit(folder_image, (pos[0], pos[1]))
         taskbar()
         draw_player()
+        for folder in folder_list:
+            assets.draw_text(folder[4][0], assets.font, "black", win, folder[4][1], folder[4][2])
 
 # update
 def update():
