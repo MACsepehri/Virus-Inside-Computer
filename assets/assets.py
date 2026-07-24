@@ -2,6 +2,9 @@ import pygame
 
 pygame.init()
 
+font = pygame.font.Font("assets/font/font.ttf", 48)
+small_font = pygame.font.Font("assets/font/font.ttf", 32)
+
 class Button:
     def __init__(self, win, x, y, width, height, font=None, text="", middle=False, text_color="white", button_color="black", hover_color=(21,21,21), image=None, r=5, win_object=None):
         self.win_object = win_object if win_object is not None else win
