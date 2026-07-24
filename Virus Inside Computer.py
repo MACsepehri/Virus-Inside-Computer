@@ -29,21 +29,47 @@ player_left = pygame.transform.scale(pygame.image.load("assets/image/player/left
 player = player_middle
 playerX = 10
 playerY = display_info.current_h - taskbar_.get_height() - player.get_height() + 20
+jump = False
+come_down_y = display_info.current_h - taskbar_.get_height() - player.get_height() + 20
+jump_velocity = 0
 
 # player movement
 def draw_player():
-    global playerX
+    global playerX, playerY, jump, come_down_y, jump_velocity, player
 
     keys = pygame.key.get_pressed()
+    
     if keys[pygame.K_a]:
         playerX -= 3
+        player = player_left
     elif keys[pygame.K_d]:
         playerX += 3
+        player = player_right
+    else:
+        player = player_middle
+
+    if keys[pygame.K_SPACE] and not jump:
+        jump = True
+        jump_velocity = -20
+
+    if jump:
+        if keys[pygame.K_SPACE]:
+            jump_velocity += 0.5
+        else:
+            jump_velocity += 1.5
+            
+        playerY += jump_velocity
+        
+        if playerY >= come_down_y:
+            playerY = come_down_y
+            jump = False
+            jump_velocity = 0
 
     if playerX <= 0:
         playerX = 0
     elif playerX >= display_info.current_w - player.get_width():
         playerX = display_info.current_w - player.get_width()
+    
     win.blit(player, (playerX, playerY))
 
 # draw taskbar
