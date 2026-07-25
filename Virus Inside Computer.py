@@ -48,6 +48,8 @@ glitch_image_list, is_virus_in_glitch = assets.add_glitch()
 
 # player data
 player_heart = 100
+antivirus_defender = assets.Button(win, display_info.current_w - 270, 70, 64, 64, assets.small_font, "", image=pygame.transform.scale(pygame.image.load("assets/image/player_tools/antivirus-defender.png"), (64, 64)), button_color=(174, 215, 232), hover_color=(160, 213, 235), r=5)
+antivirus_attacker = assets.Button(win, display_info.current_w - 200, 70, 64, 64, assets.small_font, "", image=pygame.transform.scale(pygame.image.load("assets/image/player_tools/antivirus-attacker.png"), (64, 64)), button_color=(174, 215, 232), hover_color=(160, 213, 235), r=5)
 
 # phone
 def detect():
@@ -252,6 +254,7 @@ def phase_1():
         taskbar()
         draw_player()
         phase1_messagebox_info()
+        assets.draw_button([antivirus_defender, antivirus_attacker])
         draw_folder = False
 
         # for data in glitch_image_list:
