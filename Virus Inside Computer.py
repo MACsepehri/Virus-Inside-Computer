@@ -48,8 +48,8 @@ glitch_image_list, is_virus_in_glitch = assets.add_glitch()
 
 # player data
 player_heart = 100
-antivirus_defender = assets.Button(win, display_info.current_w - 270, 70, 64, 64, assets.small_font, "", image=pygame.transform.scale(pygame.image.load("assets/image/player_tools/antivirus-defender.png"), (64, 64)), button_color=(174, 215, 232), hover_color=(160, 213, 235), r=5)
-antivirus_attacker = assets.Button(win, display_info.current_w - 200, 70, 64, 64, assets.small_font, "", image=pygame.transform.scale(pygame.image.load("assets/image/player_tools/antivirus-attacker.png"), (64, 64)), button_color=(174, 215, 232), hover_color=(160, 213, 235), r=5)
+antivirus_defender = assets.Button(win, display_info.current_w - 300, 70, 64, 64, assets.small_font, "", image=pygame.transform.scale(pygame.image.load("assets/image/player_tools/antivirus-defender.png"), (64, 64)), button_color=(174, 215, 232), hover_color=(160, 213, 235), r=5)
+antivirus_attacker = assets.Button(win, display_info.current_w - 230, 70, 64, 64, assets.small_font, "", image=pygame.transform.scale(pygame.image.load("assets/image/player_tools/antivirus-attacker.png"), (64, 64)), button_color=(174, 215, 232), hover_color=(160, 213, 235), r=5)
 click_cooldown = 0
 phase_entry_cooldown = 0
 
@@ -280,6 +280,7 @@ def phase_1():
         pygame.draw.rect(win, (255, 60, 60), (display_info.current_w - 300, 20, filled_width, 40))
         pygame.draw.rect(win, (120, 0, 0), (display_info.current_w - 300, 20, 200, 40), 3)
         assets.draw_text(f"Health: {player_heart}", assets.small_font, "black", win, display_info.current_w - 290, 27)
+        assets.draw_text("Attack: LMB\nDefend: RMB", assets.small_font, "black", win, display_info.current_w - 150, 70)
 
         if not phase_1_messageinfo_show:
             phone()
