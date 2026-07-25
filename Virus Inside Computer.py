@@ -281,6 +281,7 @@ def phase_1():
         pygame.draw.rect(win, (120, 0, 0), (display_info.current_w - 300, 20, 200, 40), 3)
         assets.draw_text(f"Health: {player_heart}", assets.small_font, "black", win, display_info.current_w - 290, 27)
         assets.draw_text("Attack: LMB\nDefend: RMB", assets.small_font, "black", win, display_info.current_w - 150, 70)
+        assets.draw_text(f"Fps: {FPS}", assets.small_font, "black", win, display_info.current_w - 90, 27)
 
         if not phase_1_messageinfo_show:
             phone()
