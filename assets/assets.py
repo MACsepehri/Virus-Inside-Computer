@@ -8,7 +8,10 @@ small_font = pygame.font.Font("assets/font/font.ttf", 32)
 glitch_range = random.randint(5, 16)
 pos = []
 for i in range(glitch_range):
-    pos.append((random.random(pygame.display.Info().current_w, pygame.display.Info().current_h)))
+    x = random.randint(0, pygame.display.Info().current_w)
+    y = random.randint(0, pygame.display.Info().current_h)
+
+    pos.append((x, y))
 
 class Button:
     def __init__(self, win, x, y, width, height, font=None, text="", middle=False, text_color="white", button_color="black", hover_color=(21,21,21), image=None, r=5, win_object=None):
@@ -108,5 +111,5 @@ def add_glitch():
     for i in glitch_range:
         img = pygame.image.load("assets/image/phase/1/glitch.png")
         glitch_image_list.append((pygame.transform.scale(img, (120, 80)), pos[i]))
-        glitch_virus_state.append(random.choice([True, False]))
+        glitch_virus_state.append(random.choice([True, False])) # True : one virus is there | False : virus result (it is not there.)
     return glitch_image_list, glitch_virus_state
