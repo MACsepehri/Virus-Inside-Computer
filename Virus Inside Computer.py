@@ -50,6 +50,8 @@ glitch_image_list, is_virus_in_glitch = assets.add_glitch()
 player_heart = 100
 antivirus_defender = assets.Button(win, display_info.current_w - 270, 70, 64, 64, assets.small_font, "", image=pygame.transform.scale(pygame.image.load("assets/image/player_tools/antivirus-defender.png"), (64, 64)), button_color=(174, 215, 232), hover_color=(160, 213, 235), r=5)
 antivirus_attacker = assets.Button(win, display_info.current_w - 200, 70, 64, 64, assets.small_font, "", image=pygame.transform.scale(pygame.image.load("assets/image/player_tools/antivirus-attacker.png"), (64, 64)), button_color=(174, 215, 232), hover_color=(160, 213, 235), r=5)
+click_cooldown = 0
+phase_entry_cooldown = 0
 
 # phone
 def detect():
@@ -78,12 +80,12 @@ def phone():
 
 # phases
 def videos():
-    global status
-    global playerX, playerY
+    global status, playerX, playerY, phase_entry_cooldown
 
     status = "phase_1"
     playerX = 10
     playerY = display_info.current_h - taskbar_.get_height() - player.get_height() + 20
+    phase_entry_cooldown = 30
     phase_1()
 
 folder_list = [
@@ -248,17 +250,31 @@ def ingame():
 
 # phase parts
 def phase_1():
-    global status, draw_folder, phase_1_messageinfo_show
+    global status, draw_folder, phase_1_messageinfo_show, click_cooldown, phase_entry_cooldown
 
     if status == "phase_1":
+        if phase_entry_cooldown > 0:
+            phase_entry_cooldown -= 1
+        
+        if click_cooldown <= 0 and phase_entry_cooldown <= 0:
+            mouse_buttons = pygame.mouse.get_pressed()
+            if mouse_buttons[0]:
+                print("Attack!")
+                click_cooldown = 10
+            elif mouse_buttons[2]:
+                print("Defend!")
+                click_cooldown = 10
+        else:
+            if click_cooldown > 0:
+                click_cooldown -= 1
+
         taskbar()
         draw_player()
         phase1_messagebox_info()
         assets.draw_button([antivirus_defender, antivirus_attacker])
         draw_folder = False
 
-        # for data in glitch_image_list:
-        #     win.blit(data[0], data[1])
+        # Health bar
         filled_width = (player_heart / 100) * 200
         pygame.draw.rect(win, (80, 80, 80), (display_info.current_w - 300, 20, 200, 40))
         pygame.draw.rect(win, (255, 60, 60), (display_info.current_w - 300, 20, filled_width, 40))
