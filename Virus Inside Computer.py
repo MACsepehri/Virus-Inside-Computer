@@ -44,6 +44,10 @@ detect_times = 10
 detect_timer = 0
 detect_message_show = False
 show_it_again_phase_1 = True
+glitch_image_list, is_virus_in_glitch = assets.add_glitch()
+
+# player data
+player_heart = 100
 
 # phone
 def detect():
@@ -249,6 +253,14 @@ def phase_1():
         draw_player()
         phase1_messagebox_info()
         draw_folder = False
+
+        # for data in glitch_image_list:
+        #     win.blit(data[0], data[1])
+        filled_width = (player_heart / 100) * 200
+        pygame.draw.rect(win, (80, 80, 80), (display_info.current_w - 300, 20, 200, 40))
+        pygame.draw.rect(win, (255, 60, 60), (display_info.current_w - 300, 20, filled_width, 40))
+        pygame.draw.rect(win, (120, 0, 0), (display_info.current_w - 300, 20, 200, 40), 3)
+        assets.draw_text(f"Health: {player_heart}", assets.small_font, "black", win, display_info.current_w - 290, 27)
 
         if not phase_1_messageinfo_show:
             phone()
