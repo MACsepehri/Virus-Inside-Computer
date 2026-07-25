@@ -108,7 +108,7 @@ def button_action(btn_list, action_list):
 def add_glitch():
     glitch_image_list = []
     glitch_virus_state = []
-    for i in glitch_range:
+    for i in range(glitch_range):
         img = pygame.image.load("assets/image/phase/1/glitch.png")
         glitch_image_list.append((pygame.transform.scale(img, (120, 80)), pos[i]))
         glitch_virus_state.append(random.choice([True, False])) # True : one virus is there | False : virus result (it is not there.)
