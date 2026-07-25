@@ -41,6 +41,7 @@ class Button:
         self.hover_color = hover_color
         self.clicked = False
         self.visible = True
+        self.hover = False
         self.middle = middle
         self.image = image if image != "" else None
         self.border_radius = r
@@ -56,8 +57,10 @@ class Button:
         mouse_x, mouse_y = pygame.mouse.get_pos()
         if self.rect.collidepoint(mouse_x, mouse_y):
             pygame.draw.rect(self.win_object, self.hover_color, self.rect, border_radius=self.border_radius)
+            self.hover = True
         else:
             pygame.draw.rect(self.win_object, self.button_color, self.rect, border_radius=self.border_radius)
+            self.hover = False
 
         if self.image is not None:
             text_surface = self.image
