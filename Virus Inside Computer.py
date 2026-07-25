@@ -39,15 +39,35 @@ draw_folder = False
 detected_viruses = 0
 detected_glitches = 0
 detect_times = 10
+detect_timer = 0
+detect_message_show = False
+show_it_again_phase_1 = True
 
 # phone
+def detect():
+    global detected_glitches, detected_glitches, detect_times, detect_timer, detect_message_show, show_it_again_phase_1
+    print(True)
+    if show_it_again_phase_1:
+        if (detect_times - 1) <= 0:
+            detect_message_show = True
+            show_it_again_phase_1 = False
+
 def phone():
-    global status
+    global status, detect_message_show, detect_timer, detect_message_show, detect_times
 
     if status == "phase_1":
         assets.draw_text(f"Detected virus: {detected_viruses}\nDetected glitch (might be virus): {detected_glitches}", assets.font, "black", win, 20, 20)
         btn = [ assets.Button(win, 20, 150, 200, 90, assets.font, f"Detect ({detect_times})") ]
         assets.draw_button(btn)
+        assets.button_action(btn, [ detect ])
+
+    if detect_message_show:
+        if int(detect_timer) <= 100:
+            assets.draw_text("Not enough detecting data", assets.font, "black", win, 500, 300)
+            detect_times = 0
+            detect_timer += 0.05
+        else:
+            detect_message_show = False
 
 # phases
 def videos():
