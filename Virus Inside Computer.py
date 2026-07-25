@@ -1,5 +1,6 @@
 import pygame
 import sys
+import random
 from assets import assets
 
 # init
@@ -53,6 +54,17 @@ antivirus_attacker = assets.Button(win, display_info.current_w - 230, 70, 64, 64
 click_cooldown = 0
 phase_entry_cooldown = 0
 
+# generate viruses
+def generate_virus():
+    l = []
+    img1 = pygame.image.load("assets/image/enemy/easy.png")
+    img2 = pygame.image.load("assets/image/enemy/mediume.png")
+    for i in range(random.randint(7, 16)):
+        img = random.choice([img1, img2])
+        l.append((pygame.transform.scale(img, (100, 100)), (random.randint(1, display_info.current_w - 100), random.randint(100, display_info.current_h - taskbar_.get_height() - 100))))
+
+    return l
+        
 # phone
 def detect():
     global detected_glitches, detected_glitches, detect_times, detect_timer, detect_message_show, show_it_again_phase_1
