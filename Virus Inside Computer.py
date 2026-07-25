@@ -53,6 +53,8 @@ antivirus_defender = assets.Button(win, display_info.current_w - 300, 70, 64, 64
 antivirus_attacker = assets.Button(win, display_info.current_w - 230, 70, 64, 64, assets.small_font, "", image=pygame.transform.scale(pygame.image.load("assets/image/player_tools/antivirus-attacker.png"), (64, 64)), button_color=(174, 215, 232), hover_color=(160, 213, 235), r=5)
 click_cooldown = 0
 phase_entry_cooldown = 0
+player_collision_cooldown = 0
+player_collision_entry = 0
 
 # generate viruses
 def generate_virus():
@@ -240,7 +242,7 @@ def phase1_messagebox_info():
 # draw taskbar
 def taskbar():
     win.blit(taskbar_, (0, display_info.current_h - taskbar_.get_height()))
-
+g = generate_virus()
 # start
 def start():
     global status
@@ -265,41 +267,67 @@ def ingame():
 
 # phase parts
 def phase_1():
-    global status, draw_folder, phase_1_messageinfo_show, click_cooldown, phase_entry_cooldown
+    global status, draw_folder, phase_1_messageinfo_show
+    global click_cooldown, phase_entry_cooldown
+    global player_collision_cooldown, player_heart
 
-    if status == "phase_1":
-        if phase_entry_cooldown > 0:
-            phase_entry_cooldown -= 1
-        
-        if click_cooldown <= 0 and phase_entry_cooldown <= 0:
-            mouse_buttons = pygame.mouse.get_pressed()
-            if mouse_buttons[0]:
-                print("Attack!")
-                click_cooldown = 10
-            elif mouse_buttons[2]:
-                print("Defend!")
-                click_cooldown = 10
-        else:
-            if click_cooldown > 0:
-                click_cooldown -= 1
+    if status != "phase_1":
+        return
 
-        taskbar()
-        draw_player()
-        phase1_messagebox_info()
-        assets.draw_button([antivirus_defender, antivirus_attacker])
-        draw_folder = False
+    if phase_entry_cooldown > 0:
+        phase_entry_cooldown -= 1
 
-        # Health bar
-        filled_width = (player_heart / 100) * 200
-        pygame.draw.rect(win, (80, 80, 80), (display_info.current_w - 300, 20, 200, 40))
-        pygame.draw.rect(win, (255, 60, 60), (display_info.current_w - 300, 20, filled_width, 40))
-        pygame.draw.rect(win, (120, 0, 0), (display_info.current_w - 300, 20, 200, 40), 3)
-        assets.draw_text(f"Health: {player_heart}", assets.small_font, "black", win, display_info.current_w - 290, 27)
-        assets.draw_text("Attack: LMB\nDefend: RMB", assets.small_font, "black", win, display_info.current_w - 150, 70)
-        assets.draw_text(f"Fps: {FPS}", assets.small_font, "black", win, display_info.current_w - 90, 27)
+    if click_cooldown > 0:
+        click_cooldown -= 1
+    elif phase_entry_cooldown <= 0:
+        mouse_buttons = pygame.mouse.get_pressed()
 
-        if not phase_1_messageinfo_show:
-            phone()
+        if mouse_buttons[0]:
+            print("Attack!")
+            click_cooldown = 10
+
+        elif mouse_buttons[2]:
+            print("Defend!")
+            click_cooldown = 10
+
+    if player_collision_cooldown > 0:
+        player_collision_cooldown -= 1
+    else:
+        player_rect = player.get_rect(topleft=(playerX, playerY))
+
+        for virus_img, virus_pos in g:
+            virus_rect = virus_img.get_rect(topleft=virus_pos)
+
+            if player_rect.colliderect(virus_rect):
+                print("Collision!")
+                player_heart = max(0, player_heart - 1)
+                player_collision_cooldown = 10
+                break
+
+    for virus_img, virus_pos in g:
+        win.blit(virus_img, virus_pos)
+
+    taskbar()
+    draw_player()
+    draw_folder = False
+
+    phase1_messagebox_info()
+
+    assets.draw_button([antivirus_defender, antivirus_attacker])
+
+    filled_width = max(0, (player_heart / 100) * 200)
+
+    pygame.draw.rect(win, (80, 80, 80), (display_info.current_w - 300, 20, 200, 40))
+    pygame.draw.rect(win, (255, 60, 60), (display_info.current_w - 300, 20, filled_width, 40))
+
+    pygame.draw.rect(win, (120, 0, 0), (display_info.current_w - 300, 20, 200, 40), 3)
+    assets.draw_text(f"Health: {player_heart}", assets.small_font, "black", win, display_info.current_w - 290, 27)
+    assets.draw_text("Attack: LMB\nDefend: RMB", assets.small_font, "black", win, display_info.current_w - 150, 70)
+
+    assets.draw_text(f"FPS: {clock.get_fps():.0f}", assets.small_font, "black", win, display_info.current_w - 90, 27)
+
+    if not phase_1_messageinfo_show:
+        phone()
 
 # update
 def update():
