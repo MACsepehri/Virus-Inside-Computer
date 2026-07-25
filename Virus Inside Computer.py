@@ -55,6 +55,7 @@ click_cooldown = 0
 phase_entry_cooldown = 0
 player_collision_cooldown = 0
 player_collision_entry = 0
+hover = False
 
 # generate viruses
 def generate_virus():
@@ -79,12 +80,13 @@ def detect():
             show_it_again_phase_1 = False
 
 def phone():
-    global status, detect_message_show, detect_timer, detect_message_show, detect_times
+    global status, detect_message_show, detect_timer, detect_message_show, detect_times, hover
 
     if status == "phase_1":
         assets.draw_text(f"Detected virus: {detected_viruses}\nDetected glitch (might be virus): {detected_glitches}", assets.font, "black", win, 20, 20)
         btn = [ assets.Button(win, 20, 150, 200, 90, assets.font, f"Detect ({detect_times})") ]
         assets.draw_button(btn)
+        hover = btn[0].hover
         assets.button_action(btn, [ detect ])
 
     if detect_message_show:
@@ -242,7 +244,7 @@ def phase1_messagebox_info():
 # draw taskbar
 def taskbar():
     win.blit(taskbar_, (0, display_info.current_h - taskbar_.get_height()))
-g = generate_virus()
+
 # start
 def start():
     global status
@@ -269,7 +271,7 @@ def ingame():
 def phase_1():
     global status, draw_folder, phase_1_messageinfo_show
     global click_cooldown, phase_entry_cooldown
-    global player_collision_cooldown, player_heart
+    global player_collision_cooldown, player_heart, hover
 
     if status != "phase_1":
         return
@@ -282,30 +284,28 @@ def phase_1():
     elif phase_entry_cooldown <= 0:
         mouse_buttons = pygame.mouse.get_pressed()
 
-        if mouse_buttons[0]:
-            print("Attack!")
+        if mouse_buttons[0] and not hover:
             click_cooldown = 10
 
-        elif mouse_buttons[2]:
-            print("Defend!")
+        elif mouse_buttons[2] and not hover:
             click_cooldown = 10
 
-    if player_collision_cooldown > 0:
-        player_collision_cooldown -= 1
-    else:
-        player_rect = player.get_rect(topleft=(playerX, playerY))
+    # if player_collision_cooldown > 0:
+    #     player_collision_cooldown -= 1
+    # else:
+    #     player_rect = player.get_rect(topleft=(playerX, playerY))
 
-        for virus_img, virus_pos in g:
-            virus_rect = virus_img.get_rect(topleft=virus_pos)
+    #     for virus_img, virus_pos in g:
+    #         virus_rect = virus_img.get_rect(topleft=virus_pos)
 
-            if player_rect.colliderect(virus_rect):
-                print("Collision!")
-                player_heart = max(0, player_heart - 1)
-                player_collision_cooldown = 10
-                break
+    #         if player_rect.colliderect(virus_rect):
+    #             print("Collision!")
+    #             player_heart = max(0, player_heart - 1)
+    #             player_collision_cooldown = 10
+    #             break
 
-    for virus_img, virus_pos in g:
-        win.blit(virus_img, virus_pos)
+    # for virus_img, virus_pos in g:
+    #     win.blit(virus_img, virus_pos)
 
     taskbar()
     draw_player()
