@@ -8,6 +8,8 @@ display_info = pygame.display.Info()
 win = pygame.display.set_mode((display_info.current_w, display_info.current_h))
 color = (135,206,235)
 status = "menu"
+clock = pygame.time.Clock()
+FPS = 120
 
 taskbar_ = pygame.image.load("assets/image/logo/taskbar.png").convert_alpha()
 taskbar_ = pygame.transform.scale(
@@ -46,7 +48,6 @@ show_it_again_phase_1 = True
 # phone
 def detect():
     global detected_glitches, detected_glitches, detect_times, detect_timer, detect_message_show, show_it_again_phase_1
-    print(True)
     if show_it_again_phase_1:
         if (detect_times - 1) <= 0:
             detect_message_show = True
@@ -65,7 +66,7 @@ def phone():
         if int(detect_timer) <= 100:
             assets.draw_text("Not enough detecting data", assets.font, "black", win, 500, 300)
             detect_times = 0
-            detect_timer += 0.05
+            detect_timer += 0.1
         else:
             detect_message_show = False
 
@@ -278,6 +279,7 @@ def main():
         win.fill(color)
         update()
         pygame.display.update()
+        clock.tick(FPS)
 
 if __name__ == "__main__":
     main()
