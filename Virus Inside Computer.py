@@ -68,6 +68,7 @@ def generate_virus():
 
     return l
 
+
 def collision(rect1, rect2):
     return rect1.colliderect(rect2)
     
