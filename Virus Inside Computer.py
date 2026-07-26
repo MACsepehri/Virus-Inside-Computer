@@ -246,7 +246,7 @@ def taskbar():
     if display_info.current_h > 768:
         win.blit(taskbar_, (0, display_info.current_h - taskbar_.get_height()))
     else:
-        win.blit(taskbar_, (0, display_info.current_h - (taskbar_.get_height() * 2)))
+        win.blit(taskbar_, (0, display_info.current_h - (taskbar_.get_height() + (taskbar_.get_height() / 2))))
 
 # start
 def start():
