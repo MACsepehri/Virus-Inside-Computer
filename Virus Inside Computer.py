@@ -12,8 +12,6 @@ status = "menu"
 clock = pygame.time.Clock()
 FPS = 120
 
-display_info.current_w - 300
-
 taskbar_ = pygame.image.load("assets/image/logo/taskbar.png").convert_alpha()
 taskbar_ = pygame.transform.scale(
     taskbar_,
@@ -69,7 +67,6 @@ def generate_virus():
         l.append((pygame.transform.scale(img, (100, 100)), (random.randint(1, display_info.current_w - 100), random.randint(100, display_info.current_h - taskbar_.get_height() - 100))))
 
     return l
-
 
 def collision(rect1, rect2):
     return rect1.colliderect(rect2)
