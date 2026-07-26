@@ -78,8 +78,7 @@ def generate_virus():
                 display_info.current_h - (taskbar_.get_height() + (taskbar_.get_height() / 2)) - 100
             )
 
-        l.append((
-            pygame.transform.scale(img, (100, 100)), (random.randint(1, display_info.current_w - 100) ,y)))
+        l.append((pygame.transform.scale(img, (100, 100)), (random.randint(1, display_info.current_w - 100) ,y)))
 
     return l
 
@@ -126,12 +125,20 @@ def videos():
         phase_entry_cooldown = 30
     phase_1()
 
-folder_list = [
-    (100, 100, 100, 80, ["Game", 100, 180, lambda: ...]),
-    (400, 200, 100, 80, ["Photos", 400, 280, lambda: ...]),
-    (200, 400, 100, 80, ["Docs", 200, 480, lambda: ...]),
-    (display_info.current_w - 300, 500, 100, 80, ["Videos", display_info.current_w - 300, 580, videos])
-]
+if display_info.current_h > 768:
+    folder_list = [
+        (100, 100, 100, 80, ["Game", 100, 180, lambda: ...]),
+        (400, 200, 100, 80, ["Photos", 400, 280, lambda: ...]),
+        (200, 400, 100, 80, ["Docs", 200, 480, lambda: ...]),
+        (display_info.current_w - 300, 500, 100, 80, ["Videos", display_info.current_w - 300, 580, videos])
+    ]
+else:
+    folder_list = [
+        (100, 70, 100, 80, ["Game", 100, 150, lambda: ...]),
+        (400, 170, 100, 80, ["Photos", 400, 250, lambda: ...]),
+        (200, 340, 100, 80, ["Docs", 200, 420, lambda: ...]),
+        (display_info.current_w - 300, 430, 100, 80, ["Videos", display_info.current_w - 300, 510, videos])
+    ]
 
 # player movement
 def draw_player():
@@ -217,7 +224,7 @@ def draw_player():
 
         if not on_platform and playerY < come_down_y:
             if status == "phase_1":
-                player += 1.5
+                playerY += 1.5
             else:
                 playerY += 0.5
         
