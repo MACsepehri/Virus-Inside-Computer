@@ -122,19 +122,35 @@ class Bullet:
         self.win = win
         self.bullets = []
 
-    def add_new_bullet(self, x, y):
-        self.bullets.append([x, y])
+    def add_new_bullet(self, x, y, direction):
+        self.bullets.append({
+            "x": x,
+            "y": y,
+            "direction": direction
+        })
 
     def move(self):
-        for bullet in self.bullets:
-            bullet[0] += 0.1
+        for bullet in self.bullets[:]:
 
+            if bullet["direction"] == "right":
+                bullet["x"] += 10
+
+            elif bullet["direction"] == "left":
+                bullet["x"] -= 10
+
+            elif bullet["direction"] == "middle":
+                bullet["y"] -= 1
             pygame.draw.circle(
                 self.win,
                 "yellow",
-                (int(bullet[0]), int(bullet[1])),
+                (int(bullet["x"]), int(bullet["y"])),
                 6
             )
 
-    def update(self):
-        self.move()
+            if (
+                bullet["x"] < 0 or
+                bullet["x"] > self.win.get_width() or
+                bullet["y"] < 0 or
+                bullet["y"] > self.win.get_height()
+            ):
+                self.bullets.remove(bullet)

@@ -12,8 +12,8 @@ status = "menu"
 clock = pygame.time.Clock()
 pygame.display.set_caption("Virus Inside Computer : DEMO")
 FPS = 120
-direction = ""
-
+direction = "midde"
+bullet = assets.Bullet(win)
 taskbar_ = pygame.image.load("assets/image/logo/taskbar.png").convert_alpha()
 taskbar_ = pygame.transform.scale(
     taskbar_,
@@ -186,11 +186,6 @@ def draw_player():
                     folder_rect = pygame.Rect(folder[0], folder[1], folder[2], folder[3])
                     player_rect = pygame.Rect(playerX, playerY + player.get_height() - 10, 
                                             player.get_width(), 10)
-
-                    if isinstance(mouse_pos, tuple):
-                        if mouse_pos[0] == folder[0] and mouse_pos[1] == folder[1]:
-                            pass
-
                     
                     if player_rect.colliderect(folder_rect):
                         playerY = folder[1] - player.get_height()
@@ -224,16 +219,7 @@ def draw_player():
                     platform_y = folder[1]
 
                     button = [
-                        assets.Button(
-                            win,
-                            folder[0] - 50,
-                            folder[1] - 60,
-                            200,
-                            50,
-                            assets.font,
-                            "Enter"
-                        )
-                    ]
+                        assets.Button(win, folder[0] - 50, folder[1] - 60, 200, 50, assets.font, "Enter")]
                     assets.draw_button(button)
                     assets.button_action(button, [ folder[4][3] ])
                     break
@@ -347,6 +333,13 @@ def phase_1():
         mouse_buttons = pygame.mouse.get_pressed()
 
         if mouse_buttons[0] and not hover:
+            enemy_img, enemy_pos = e[0]
+            bullet.add_new_bullet(
+                playerX + player.get_width() // 2,
+                playerY + player.get_height() // 2,
+                enemy_pos[0] + enemy_img.get_width() // 2,
+                enemy_pos[1] + enemy_img.get_height() // 2
+            )
             click_cooldown = 10
 
         elif mouse_buttons[2] and not hover:
@@ -431,6 +424,7 @@ def main():
         win.fill(color)
         update()
         pygame.display.update()
+        bullet.move()
         clock.tick(FPS)
 
 if __name__ == "__main__":
