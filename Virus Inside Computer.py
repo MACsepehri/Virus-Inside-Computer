@@ -116,6 +116,7 @@ def phone():
 def videos():
     global status, playerX, playerY, phase_entry_cooldown
 
+
     status = "phase_1"
     playerX = 10
     if display_info.current_h > 768:
