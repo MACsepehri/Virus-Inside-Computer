@@ -10,6 +10,7 @@ win = pygame.display.set_mode((display_info.current_w, display_info.current_h))
 color = (135,206,235)
 status = "menu"
 clock = pygame.time.Clock()
+pygame.display.set_caption("Virus Inside Computer : DEMO")
 FPS = 120
 
 taskbar_ = pygame.image.load("assets/image/logo/taskbar.png").convert_alpha()
