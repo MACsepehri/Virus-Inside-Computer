@@ -12,7 +12,7 @@ status = "menu"
 clock = pygame.time.Clock()
 pygame.display.set_caption("Virus Inside Computer : DEMO")
 FPS = 120
-direction = "midde"
+direction = "right"
 bullet = assets.Bullet(win)
 taskbar_ = pygame.image.load("assets/image/logo/taskbar.png").convert_alpha()
 taskbar_ = pygame.transform.scale(
@@ -164,7 +164,6 @@ def draw_player():
         direction = "right"
     else:
         player = player_middle
-        direction = "middle"
 
     if keys[pygame.K_SPACE] and not jump:
         jump = True
@@ -333,12 +332,10 @@ def phase_1():
         mouse_buttons = pygame.mouse.get_pressed()
 
         if mouse_buttons[0] and not hover:
-            enemy_img, enemy_pos = e[0]
             bullet.add_new_bullet(
                 playerX + player.get_width() // 2,
                 playerY + player.get_height() // 2,
-                enemy_pos[0] + enemy_img.get_width() // 2,
-                enemy_pos[1] + enemy_img.get_height() // 2
+                direction
             )
             click_cooldown = 10
 
@@ -423,8 +420,8 @@ def main():
 
         win.fill(color)
         update()
-        pygame.display.update()
         bullet.move()
+        pygame.display.update()
         clock.tick(FPS)
 
 if __name__ == "__main__":
