@@ -129,6 +129,25 @@ class Bullet:
             "direction": direction
         })
 
+    def check_collision(self, enemies):
+        for bullet in self.bullets[:]:
+            bullet_rect = pygame.Rect(
+                bullet["x"] - 6,
+                bullet["y"] - 6,
+                12,
+                12
+            )
+
+            for enemy in enemies[:]:
+                enemy_img, enemy_pos = enemy
+
+                enemy_rect = enemy_img.get_rect(topleft=enemy_pos)
+
+                if bullet_rect.colliderect(enemy_rect):
+                    self.bullets.remove(bullet)
+                    enemies.remove(enemy)
+                    break
+
     def move(self):
         for bullet in self.bullets[:]:
 
