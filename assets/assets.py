@@ -116,3 +116,25 @@ def add_glitch():
         glitch_image_list.append((pygame.transform.scale(img, (120, 80)), pos[i]))
         glitch_virus_state.append(random.choice([True, False])) # True : one virus is there | False : virus result (it is not there.)
     return glitch_image_list, glitch_virus_state
+
+class Bullet:
+    def __init__(self, win):
+        self.win = win
+        self.bullets = []
+
+    def add_new_bullet(self, x, y):
+        self.bullets.append([x, y])
+
+    def move(self):
+        for bullet in self.bullets:
+            bullet[0] += 0.1
+
+            pygame.draw.circle(
+                self.win,
+                "yellow",
+                (int(bullet[0]), int(bullet[1])),
+                6
+            )
+
+    def update(self):
+        self.move()
