@@ -24,9 +24,15 @@ player_right = pygame.transform.scale(pygame.image.load("assets/image/player/rig
 player_left = pygame.transform.scale(pygame.image.load("assets/image/player/left.png"), (130, 140))
 player = player_middle
 playerX = 10
-playerY = display_info.current_h - taskbar_.get_height() - player.get_height() + 20
+if display_info.current_h > 768:
+    playerY = display_info.current_h - taskbar_.get_height() - player.get_height() + 20
+else:
+    playerY = display_info.current_h - (taskbar_.get_height() + (taskbar_.get_height() / 2)) - player.get_height() + 20
 jump = False
-come_down_y = display_info.current_h - taskbar_.get_height() - player.get_height() + 20
+if display_info.current_h > 768:
+    come_down_y = display_info.current_h - taskbar_.get_height() - player.get_height() + 20
+else:
+    come_down_y = display_info.current_h - (taskbar_.get_height() + (taskbar_.get_height() / 2)) - player.get_height() + 20
 jump_velocity = 0
 on_platform = False
 platform_y = None
@@ -64,7 +70,16 @@ def generate_virus():
     img2 = pygame.image.load("assets/image/enemy/mediume.png")
     for i in range(random.randint(7, 16)):
         img = random.choice([img1, img2])
-        l.append((pygame.transform.scale(img, (100, 100)), (random.randint(1, display_info.current_w - 100), random.randint(100, display_info.current_h - taskbar_.get_height() - 100))))
+        if display_info.current_h > 768:
+            y = random.randint(100, display_info.current_h - taskbar_.get_height() - 100)
+        else:
+            y = random.randint(
+                100,
+                display_info.current_h - (taskbar_.get_height() + (taskbar_.get_height() / 2)) - 100
+            )
+
+        l.append((
+            pygame.transform.scale(img, (100, 100)), (random.randint(1, display_info.current_w - 100) ,y)))
 
     return l
 
@@ -103,8 +118,11 @@ def videos():
 
     status = "phase_1"
     playerX = 10
-    playerY = display_info.current_h - taskbar_.get_height() - player.get_height() + 20
-    phase_entry_cooldown = 30
+    if display_info.current_h > 768:
+        playerY = display_info.current_h - taskbar_.get_height() - player.get_height() + 20
+    else:
+        playerY = display_info.current_h - (taskbar_.get_height() + (taskbar_.get_height() / 2)) - player.get_height() + 20
+        phase_entry_cooldown = 30
     phase_1()
 
 folder_list = [
