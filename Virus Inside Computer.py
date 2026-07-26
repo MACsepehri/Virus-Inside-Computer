@@ -421,6 +421,7 @@ def main():
         win.fill(color)
         update()
         bullet.move()
+        bullet.check_collision(e)
         pygame.display.update()
         clock.tick(FPS)
 
