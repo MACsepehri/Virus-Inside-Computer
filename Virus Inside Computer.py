@@ -2,7 +2,7 @@ import pygame
 import sys
 import random
 from assets import assets
-
+# problem about 1920 X 1080 screen
 # init
 pygame.init()
 display_info = pygame.display.Info()
@@ -12,6 +12,7 @@ status = "menu"
 clock = pygame.time.Clock()
 pygame.display.set_caption("Virus Inside Computer : DEMO")
 FPS = 120
+direction = ""
 
 taskbar_ = pygame.image.load("assets/image/logo/taskbar.png").convert_alpha()
 taskbar_ = pygame.transform.scale(
@@ -149,18 +150,21 @@ else:
 
 # player movement
 def draw_player():
-    global playerX, playerY, jump, come_down_y, jump_velocity, player, on_platform, platform_y, draw_folder
+    global playerX, playerY, jump, come_down_y, jump_velocity, player, on_platform, platform_y, draw_folder, direction
 
     keys = pygame.key.get_pressed()
     
     if keys[pygame.K_a]:
         playerX -= 3
         player = player_left
+        direction = "left"
     elif keys[pygame.K_d]:
         playerX += 3
         player = player_right
+        direction = "right"
     else:
         player = player_middle
+        direction = "middle"
 
     if keys[pygame.K_SPACE] and not jump:
         jump = True
@@ -361,8 +365,11 @@ def phase_1():
                 player_collision_cooldown = 10
                 break
 
-    for virus_img, virus_pos in e:
-        win.blit(virus_img, virus_pos)
+    for i in range(len(e)):
+        virus_img, (x, y) = e[i]
+        x -= 0.5
+        e[i] = (virus_img, (x, y))
+        win.blit(virus_img, (int(x), int(y)))
 
     taskbar()
     draw_player()
