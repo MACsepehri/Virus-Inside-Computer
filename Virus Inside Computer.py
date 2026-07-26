@@ -20,6 +20,7 @@ taskbar_ = pygame.transform.scale(
 )
 
 folder_image = pygame.transform.scale(pygame.image.load("assets/image/logo/full-folder.png"), (100, 80))
+folder_hover = pygame.transform.scale(folder_image, (110, 88))
 player_middle = pygame.transform.scale(pygame.image.load("assets/image/player/middle.png"), (130, 140))
 player_right = pygame.transform.scale(pygame.image.load("assets/image/player/right.png"), (130, 140))
 player_left = pygame.transform.scale(pygame.image.load("assets/image/player/left.png"), (130, 140))
@@ -71,21 +72,26 @@ def generate_virus():
     img2 = pygame.image.load("assets/image/enemy/mediume.png")
     for i in range(random.randint(7, 16)):
         img = random.choice([img1, img2])
+        x = random.randint(int(display_info.current_w / 2), display_info.current_w - int(img.get_width() / 2))
         if display_info.current_h > 768:
-            y = random.randint(100, display_info.current_h - taskbar_.get_height() - 100)
+            y = display_info.current_h - (taskbar_.get_height() * 2)
         else:
-            y = random.randint(
-                100,
-                display_info.current_h - (taskbar_.get_height() + (taskbar_.get_height() / 2)) - 100
-            )
+            y = display_info.current_h - (taskbar_.get_height() + (taskbar_.get_height() / 2)) - 100
 
-        l.append((pygame.transform.scale(img, (100, 100)), (random.randint(1, display_info.current_w - 100) ,y)))
+        l.append((pygame.transform.scale(img, (100, 100)), (x, y)))
 
     return l
 
+def draw_enemy_phase_1(generated_enmeis):
+    for enemy in generated_enmeis:
+        img = enemy[0]
+        pos = enemy[1]
+        win.blit(img, pos)
+
 def collision(rect1, rect2):
     return rect1.colliderect(rect2)
-    
+
+e = generate_virus()
 # phone
 def detect():
     global detected_glitches, detected_glitches, detect_times, detect_timer, detect_message_show, show_it_again_phase_1
@@ -176,6 +182,11 @@ def draw_player():
                     folder_rect = pygame.Rect(folder[0], folder[1], folder[2], folder[3])
                     player_rect = pygame.Rect(playerX, playerY + player.get_height() - 10, 
                                             player.get_width(), 10)
+
+                    if isinstance(mouse_pos, tuple):
+                        if mouse_pos[0] == folder[0] and mouse_pos[1] == folder[1]:
+                            pass
+
                     
                     if player_rect.colliderect(folder_rect):
                         playerY = folder[1] - player.get_height()
@@ -231,7 +242,7 @@ def draw_player():
         
         if not on_platform and playerY < come_down_y:
             if status == "phase_1":
-                player += 1.5
+                playerY += 1.5
             else:
                 playerY += 0.5
             if draw_folder:
@@ -289,13 +300,30 @@ def ingame():
         win10_rect.center = win.get_rect().center
         win.blit(win10IMAGE, win10_rect)
 
-        for pos in folder_list:
-            win.blit(folder_image, (pos[0], pos[1]))
+        mouse = pygame.mouse.get_pos()
+
+        for folder in folder_list:
+            x, y, w, h = folder[:4]
+            hover_rect = pygame.Rect(x - 5, y - 4, 110, 88)
+            if hover_rect.collidepoint(mouse):
+                win.blit(folder_hover, (x - 5, y - 4))
+            else:
+                win.blit(folder_image, (x, y))
         taskbar()
         draw_player()
         draw_folder = True
         for folder in folder_list:
             assets.draw_text(folder[4][0], assets.font, "black", win, folder[4][1], folder[4][2])
+
+def player_on_folder(folder):
+    horizontal = (
+        playerX + player.get_width() > folder[0]
+        and playerX < folder[0] + folder[2]
+    )
+
+    standing = abs((playerY + player.get_height()) - folder[1]) <= 3
+
+    return horizontal and standing
 
 # phase parts
 def phase_1():
@@ -320,26 +348,26 @@ def phase_1():
         elif mouse_buttons[2] and not hover:
             click_cooldown = 10
 
-    # if player_collision_cooldown > 0:
-    #     player_collision_cooldown -= 1
-    # else:
-    #     player_rect = player.get_rect(topleft=(playerX, playerY))
+    if player_collision_cooldown > 0:
+        player_collision_cooldown -= 1
+    else:
+        player_rect = player.get_rect(topleft=(playerX, playerY))
 
-    #     for virus_img, virus_pos in g:
-    #         virus_rect = virus_img.get_rect(topleft=virus_pos)
+        for virus_img, virus_pos in e:
+            virus_rect = virus_img.get_rect(topleft=virus_pos)
 
-    #         if player_rect.colliderect(virus_rect):
-    #             print("Collision!")
-    #             player_heart = max(0, player_heart - 1)
-    #             player_collision_cooldown = 10
-    #             break
+            if player_rect.colliderect(virus_rect):
+                player_heart = max(0, player_heart - 1)
+                player_collision_cooldown = 10
+                break
 
-    # for virus_img, virus_pos in g:
-    #     win.blit(virus_img, virus_pos)
+    for virus_img, virus_pos in e:
+        win.blit(virus_img, virus_pos)
 
     taskbar()
     draw_player()
     draw_folder = False
+    draw_enemy_phase_1(e)
 
     phase1_messagebox_info()
 
@@ -377,10 +405,21 @@ def update():
 
 # main
 def main():
+    global mouse_pos
+
     while True:
+        mouse_pos = pygame.mouse.get_pos()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit(0)
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+
+                    for folder in folder_list:
+                        hover_rect = pygame.Rect(folder[0] - 5, folder[1] - 4, 110, 88)
+                        if hover_rect.collidepoint(event.pos):
+                            folder[4][3]()
 
         win.fill(color)
         update()
