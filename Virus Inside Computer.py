@@ -12,6 +12,8 @@ status = "menu"
 clock = pygame.time.Clock()
 FPS = 120
 
+display_info.current_w - 300
+
 taskbar_ = pygame.image.load("assets/image/logo/taskbar.png").convert_alpha()
 taskbar_ = pygame.transform.scale(
     taskbar_,
