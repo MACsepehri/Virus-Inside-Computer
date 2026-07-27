@@ -108,15 +108,6 @@ def button_action(btn_list, action_list):
             action_list[i]()
         i += 1
 
-def add_glitch():
-    glitch_image_list = []
-    glitch_virus_state = []
-    for i in range(glitch_range):
-        img = pygame.image.load("assets/image/phase/1/glitch.png")
-        glitch_image_list.append((pygame.transform.scale(img, (120, 80)), pos[i]))
-        glitch_virus_state.append(random.choice([True, False])) # True : one virus is there | False : virus result (it is not there.)
-    return glitch_image_list, glitch_virus_state
-
 def spawn_enemy():
     img1 = pygame.image.load("assets/image/enemy/easy.png").convert_alpha()
     img2 = pygame.image.load("assets/image/enemy/mediume.png").convert_alpha()
