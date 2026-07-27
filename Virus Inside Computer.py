@@ -66,6 +66,10 @@ player_collision_cooldown = 0
 player_collision_entry = 0
 hover = False
 
+# attack and defend button hover
+attack_button_hover = False
+defend_button_hover = False
+
 # generate viruses
 def generate_virus():
     l = []
@@ -319,6 +323,7 @@ def phase_1():
     global status, draw_folder, phase_1_messageinfo_show
     global click_cooldown, phase_entry_cooldown
     global player_collision_cooldown, player_heart, hover
+    global attack_button_hover, defend_button_hover, antivirus_attacker, antivirus_defender
 
     if status != "phase_1":
         return
@@ -331,16 +336,25 @@ def phase_1():
     elif phase_entry_cooldown <= 0:
         mouse_buttons = pygame.mouse.get_pressed()
 
-        if mouse_buttons[0] and not hover:
-            bullet.add_new_bullet(
-                playerX + player.get_width() // 2,
-                playerY + player.get_height() // 2,
-                direction
-            )
-            click_cooldown = 10
+        if mouse_buttons[0]:
+            if attack_button_hover:
+                bullet.add_new_bullet(
+                    playerX + player.get_width() // 2,
+                    playerY + player.get_height() // 2,
+                    direction
+                )
+                click_cooldown = 10
 
-        elif mouse_buttons[2] and not hover:
-            click_cooldown = 10
+            elif defend_button_hover:
+                click_cooldown = 10
+
+            elif not hover:
+                bullet.add_new_bullet(
+                    playerX + player.get_width() // 2,
+                    playerY + player.get_height() // 2,
+                    direction
+                )
+                click_cooldown = 10
 
     if player_collision_cooldown > 0:
         player_collision_cooldown -= 1
@@ -369,6 +383,16 @@ def phase_1():
     phase1_messagebox_info()
 
     assets.draw_button([antivirus_defender, antivirus_attacker])
+
+    if antivirus_attacker.hover:
+        attack_button_hover = True
+    else:
+        attack_button_hover = False
+
+    if antivirus_defender.hover:
+        defend_button_hover = True
+    else:
+        defend_button_hover = False
 
     filled_width = max(0, (player_heart / 100) * 200)
 
@@ -402,7 +426,7 @@ def update():
 
 # main
 def main():
-    global mouse_pos
+    global mouse_pos, status
 
     while True:
         mouse_pos = pygame.mouse.get_pos()
@@ -412,7 +436,6 @@ def main():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-
                     for folder in folder_list:
                         hover_rect = pygame.Rect(folder[0] - 5, folder[1] - 4, 110, 88)
                         if hover_rect.collidepoint(event.pos):
@@ -420,8 +443,9 @@ def main():
 
         win.fill(color)
         update()
-        bullet.move()
-        bullet.check_collision(e)
+        if not defend_button_hover:
+            bullet.move()
+            bullet.check_collision(e)
         pygame.display.update()
         clock.tick(FPS)
 
