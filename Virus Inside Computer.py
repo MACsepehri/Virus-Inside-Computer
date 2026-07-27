@@ -19,7 +19,17 @@ taskbar_ = pygame.transform.scale(
     taskbar_,
     (display_info.current_w, taskbar_.get_height())
 )
-
+retry_button = assets.Button(
+    win,
+    0,
+    display_info.current_h - 100,
+    200,
+    90,
+    assets.font,
+    "Re-try",
+    middle=True
+)
+last_status = ""
 folder_image = pygame.transform.scale(pygame.image.load("assets/image/logo/full-folder.png"), (100, 80))
 folder_hover = pygame.transform.scale(folder_image, (110, 88))
 player_middle = pygame.transform.scale(pygame.image.load("assets/image/player/middle.png"), (130, 140))
@@ -322,11 +332,15 @@ def player_on_folder(folder):
 def phase_1():
     global status, draw_folder, phase_1_messageinfo_show
     global click_cooldown, phase_entry_cooldown
-    global player_collision_cooldown, player_heart, hover
+    global player_collision_cooldown, player_heart, hover, last_status
     global attack_button_hover, defend_button_hover, antivirus_attacker, antivirus_defender
 
     if status != "phase_1":
         return
+
+    if player_heart <= 0:
+        last_status = "phase_1"
+        status = "gameover"
 
     if phase_entry_cooldown > 0:
         phase_entry_cooldown -= 1
@@ -445,6 +459,29 @@ def spawn_enemy():
     img = pygame.transform.scale(img, (100, 100))
     return (img, (x, y))
 
+# gameover
+def reset():
+    global last_status, status, player_heart, playerX, playerY
+
+    status = last_status
+    last_status = status
+    player_heart = 100
+    playerX = 10
+    if display_info.current_h > 768:
+        playerY = display_info.current_h - taskbar_.get_height() - player.get_height() + 20
+    else:
+        playerY = display_info.current_h - (taskbar_.get_height() + (taskbar_.get_height() / 2)) - player.get_height() + 20
+
+def gameover():
+    if status == "gameover":
+        text = assets.font.render("GameOver!", True, "black")
+        text_rect = text.get_rect(center=(win.get_width() // 2,
+                                          win.get_height() // 2))
+        win.blit(text, text_rect)
+
+        assets.draw_button([retry_button])
+        assets.button_action([retry_button], [reset])
+
 # update
 def update():
     global status
@@ -460,6 +497,7 @@ def update():
 
     ingame()
     phase_1()
+    gameover()
 
 # main
 def main():
