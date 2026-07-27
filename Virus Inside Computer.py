@@ -369,11 +369,28 @@ def phase_1():
                 player_collision_cooldown = 10
                 break
 
+    speed = 1.5
     for i in range(len(e)):
         virus_img, (x, y) = e[i]
-        x -= 0.5
+        enemy_x = x + virus_img.get_width() / 2
+        enemy_y = y + virus_img.get_height() / 2
+
+        player_center_x = playerX + player.get_width() / 2
+        player_center_y = playerY + player.get_height() / 2
+
+        dx = player_center_x - enemy_x
+        dy = player_center_y - enemy_y
+
+        distance = (dx ** 2 + dy ** 2) ** 0.5
+
+        if distance != 0:
+            dx /= distance
+            dy /= distance
+
+        x += dx * speed
+        y += dy * speed
+
         e[i] = (virus_img, (x, y))
-        win.blit(virus_img, (int(x), int(y)))
 
     taskbar()
     draw_player()
@@ -410,7 +427,7 @@ def phase_1():
 
 def spawn_enemy():
     global display_info
-    
+
     img1 = pygame.image.load("assets/image/enemy/easy.png").convert_alpha()
     img2 = pygame.image.load("assets/image/enemy/mediume.png").convert_alpha()
 
