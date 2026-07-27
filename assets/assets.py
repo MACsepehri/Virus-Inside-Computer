@@ -117,6 +117,30 @@ def add_glitch():
         glitch_virus_state.append(random.choice([True, False])) # True : one virus is there | False : virus result (it is not there.)
     return glitch_image_list, glitch_virus_state
 
+def spawn_enemy():
+    img1 = pygame.image.load("assets/image/enemy/easy.png").convert_alpha()
+    img2 = pygame.image.load("assets/image/enemy/mediume.png").convert_alpha()
+
+    img = random.choice([img1, img2])
+    display_info = pygame.display.Info()
+    taskbar_ = pygame.image.load("assets/image/logo/taskbar.png").convert_alpha()
+    taskbar_ = pygame.transform.scale(
+        taskbar_,
+        (display_info.current_w, taskbar_.get_height())
+    )
+
+    x = random.randint(display_info.current_w // 2, display_info.current_w - 100)
+
+    if display_info.current_h > 768:
+        y = display_info.current_h - (taskbar_.get_height() * 2)
+    else:
+        y = display_info.current_h - (
+            taskbar_.get_height() + taskbar_.get_height() / 2
+        ) - 100
+
+    img = pygame.transform.scale(img, (100, 100))
+    return (img, (x, y))
+
 class Bullet:
     def __init__(self, win):
         self.win = win
@@ -140,12 +164,12 @@ class Bullet:
 
             for enemy in enemies[:]:
                 enemy_img, enemy_pos = enemy
-
                 enemy_rect = enemy_img.get_rect(topleft=enemy_pos)
 
                 if bullet_rect.colliderect(enemy_rect):
-                    self.bullets.remove(bullet)
                     enemies.remove(enemy)
+                    enemies.append(spawn_enemy())
+                    self.bullets.remove(bullet)
                     break
 
     def move(self):
