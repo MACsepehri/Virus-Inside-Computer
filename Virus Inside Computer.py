@@ -64,7 +64,6 @@ detect_times = 10
 detect_timer = 0
 detect_message_show = False
 show_it_again_phase_1 = True
-glitch_image_list, is_virus_in_glitch = assets.add_glitch()
 
 # player data
 player_heart = 100
@@ -79,6 +78,31 @@ hover = False
 # attack and defend button hover
 attack_button_hover = False
 defend_button_hover = False
+created_glitch = False
+glitch_list = []
+found_glitch_list = []
+search_between_glitch_pos = False
+
+# glitch
+def render_glitch():
+    global created_glitch, glitch_list, found_glitch_list, search_between_glitch_pos
+
+    if status == "phase_1":
+        if not created_glitch:
+            total_glitch = random.randint(10, 15)
+            glitch_list.clear(0)
+            for i in range(total_glitch):
+                x = random.randint(0, display_info.current_w)
+                y = random.randint(0, display_info.current_h) - taskbar_.get_height()
+                glitch_type = random.choice([True, False, False])
+                glitch_list.append((x, y, glitch_type))
+            created_glitch = True
+
+        if search_between_glitch_pos and glitch_list != []:
+            for null in range(2):
+                i = random.randint(0, len(glitch_list) - 1)
+                found_glitch_list.append(glitch_list[i])
+            search_between_glitch_pos = False
 
 # generate viruses
 def generate_virus():
