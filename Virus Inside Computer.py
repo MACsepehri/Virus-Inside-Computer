@@ -408,6 +408,26 @@ def phase_1():
     if not phase_1_messageinfo_show:
         phone()
 
+def spawn_enemy():
+    global display_info
+    
+    img1 = pygame.image.load("assets/image/enemy/easy.png").convert_alpha()
+    img2 = pygame.image.load("assets/image/enemy/mediume.png").convert_alpha()
+
+    img = random.choice([img1, img2])
+
+    x = random.randint(display_info.current_w // 2, display_info.current_w - 100)
+
+    if display_info.current_h > 768:
+        y = display_info.current_h - (taskbar_.get_height() * 2)
+    else:
+        y = display_info.current_h - (
+            taskbar_.get_height() + taskbar_.get_height() / 2
+        ) - 100
+
+    img = pygame.transform.scale(img, (100, 100))
+    return (img, (x, y))
+
 # update
 def update():
     global status
