@@ -144,7 +144,7 @@ class Bullet:
             "direction": direction
         })
 
-    def check_collision(self, enemies):
+    def check_collision(self, enemies, action=lambda: ...):
         for bullet in self.bullets[:]:
             bullet_rect = pygame.Rect(
                 bullet["x"] - 6,
@@ -161,6 +161,7 @@ class Bullet:
                     enemies.remove(enemy)
                     enemies.append(spawn_enemy())
                     self.bullets.remove(bullet)
+                    action()
                     break
 
     def move(self):
