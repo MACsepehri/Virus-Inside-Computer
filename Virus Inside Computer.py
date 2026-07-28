@@ -20,6 +20,7 @@ taskbar_ = pygame.transform.scale(
     (display_info.current_w, taskbar_.get_height())
 )
 enemy_range = random.randint(7, 16)
+last_enemy_range = enemy_range
 retry_button = assets.Button(
     win,
     0,
@@ -500,12 +501,13 @@ def enemy_drop_item():
 
 # gameover
 def reset():
-    global last_status, status, player_heart, playerX, playerY
+    global last_status, status, player_heart, playerX, playerY, enemy_range, last_enemy_range
 
     status = last_status
     last_status = status
     player_heart = 100
     playerX = 10
+    enemy_range = last_enemy_range
     if display_info.current_h > 768:
         playerY = display_info.current_h - taskbar_.get_height() - player.get_height() + 20
     else:
