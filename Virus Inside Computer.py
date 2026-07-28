@@ -19,6 +19,7 @@ taskbar_ = pygame.transform.scale(
     taskbar_,
     (display_info.current_w, taskbar_.get_height())
 )
+enemy_range = random.randint(7, 16)
 retry_button = assets.Button(
     win,
     0,
@@ -109,7 +110,7 @@ def generate_virus():
     l = []
     img1 = pygame.image.load("assets/image/enemy/easy.png")
     img2 = pygame.image.load("assets/image/enemy/mediume.png")
-    for i in range(random.randint(7, 16)):
+    for i in range(int(enemy_range)):
         img = random.choice([img1, img2])
         x = random.randint(int(display_info.current_w / 2), display_info.current_w - int(img.get_width() / 2))
         if display_info.current_h > 768:
@@ -483,6 +484,20 @@ def spawn_enemy():
     img = pygame.transform.scale(img, (100, 100))
     return (img, (x, y))
 
+def enemy_drop_item():
+    global player_heart, enemy_range, e
+    
+    items = ["bandage", "generate_more_enemy", "", "", "", ""]
+    decide = random.choice(items)
+    if decide ==  "bandage":
+        if (player_heart + 10) > 100:
+            pass
+        else:
+            player_heart += 10
+    elif decide == "generate_more_enemy":
+        enemy_range += 0.1
+        e = generate_virus()
+
 # gameover
 def reset():
     global last_status, status, player_heart, playerX, playerY
@@ -544,7 +559,7 @@ def main():
         update()
         if not defend_button_hover:
             bullet.move()
-            bullet.check_collision(e)
+            bullet.check_collision(e, enemy_drop_item)
         pygame.display.update()
         clock.tick(FPS)
 
